@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<AssemblyName>TerrariaServer</AssemblyName> <!-- old plugins reference this, if it changes, they break -->
+		<TargetFramework>net9.0</TargetFramework>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<RunPostBuildEvent>Always</RunPostBuildEvent>
+		<Version>6.1.0</Version>
+		<AssemblyTitle>TSAPI</AssemblyTitle>
+		<Product>TSAPI</Product>
+		<Company>TShock Contributors</Company>
+		<!-- extras for nuget -->
+		<PackageId>TSAPI</PackageId>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+		<Authors>TShock Contributors</Authors>
+		<Description>This is TSAPI, the API that TShock for Terraria runs on.</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.0" />
+		<PackageReference Include="OTAPI.Upcoming" Version="3.3.11" />
+	</ItemGroup>
+</Project>

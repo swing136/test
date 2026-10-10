@@ -1,0 +1,54 @@
+name: CI OTAPI3
+
+# Controls when the workflow will run
+on: 
+  push:
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ 
+          {
+            name: Windows,
+            runs-on: windows-latest,
+          },
+          {
+            name: Ubuntu,
+            runs-on: ubuntu-latest,
+          },
+          {
+            name: MacOS,
+            runs-on: macos-latest,
+          }
+        ]
+
+    # The type of runner that the job will run on
+    runs-on: ${{ matrix.os.runs-on }}
+
+    name: ${{ matrix.os.name }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: MonoMod dev build
+        run: dotnet nuget add source https://pkgs.dev.azure.com/MonoMod/MonoMod/_packaging/DevBuilds%40Local/nuget/v3/index.json -n DevBuilds@Local
+
+      - name: Build the solution
+        run: dotnet build TSAPI.sln -c Release
+
+      - name: Run tests
+        run: dotnet test --filter "FullyQualifiedName!~TerrariaServerAPI.Tests.Benchmarks"

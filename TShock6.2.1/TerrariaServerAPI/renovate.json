@@ -1,0 +1,15 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "bumpVersion": "prerelease",
+  "packageRules": [
+    {
+      "matchPackageNames": ["OTAPI.Upcoming"],
+      "ignoreUnstable": "false",
+      "bumpVersion": "prerelease",
+    }
+   ],
+  "labels": ["simple"]
+}
