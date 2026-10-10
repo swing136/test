@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net9.0</TargetFramework>
+		<Version>3.3.14</Version>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<RuntimeIdentifiers>win;osx;linux;</RuntimeIdentifiers>
+		<Nullable>enable</Nullable>
+		<PackageReleaseNotes>Terraria 1.4.5.8 on .NET9</PackageReleaseNotes>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="ModFramework.Modules.ClearScript" Version="1.1.15" />
+		<PackageReference Include="ModFramework.Modules.CSharp" Version="1.1.15" />
+		<PackageReference Include="ModFramework.Modules.Lua" Version="1.1.15" />
+		<PackageReference Include="Steamworks.NET" Version="2024.8.0" />
+		<PackageReference Include="MonoMod.RuntimeDetour.HookGen" Version="22.7.31.1" />
+		<PackageReference Include="MonoMod.RuntimeDetour" Version="25.2.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
+		<PackageReference Include="System.Security.Permissions" Version="9.0.2" />
+		<PackageReference Include="System.Drawing.Common" Version="9.0.2" />
+		<PackageReference Include="System.IO.Packaging" Version="9.0.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\FNA\FNA.Core.csproj" />
+		<ProjectReference Include="..\OTAPI.Common\OTAPI.Common.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Refs Include="$(MSBuildProjectDirectory)\..\OTAPI.Scripts\*.refs" />
+		<Patches Include="$(MSBuildProjectDirectory)\..\OTAPI.Scripts\Patches\**\*.cs" />
+		<TopLevelScripts Include="$(MSBuildProjectDirectory)\..\OTAPI.Scripts\Mods\**\*.cs" />
+		<Shims Include="$(MSBuildProjectDirectory)\..\OTAPI.Scripts\Shims\**\*.cs" />
+		<JavaScript Include="$(MSBuildProjectDirectory)\..\OTAPI.Scripts\JavaScript\**\*.js" />
+		<Lua Include="$(MSBuildProjectDirectory)\..\OTAPI.Scripts\Lua\**\*.lua" />
+	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<MakeDir Directories="$(TargetDir)modifications\" />
+		<RemoveDir Directories="$(TargetDir)modifications\" />
+		<MakeDir Directories="$(TargetDir)modifications\" />
+		<Copy SourceFiles="$(TargetDir)ModFramework.Modules.CSharp.dll" DestinationFolder="$(TargetDir)modifications" SkipUnchangedFiles="false" />
+		<Copy SourceFiles="$(TargetDir)ModFramework.Modules.ClearScript.dll" DestinationFolder="$(TargetDir)modifications" SkipUnchangedFiles="false" />
+		<Copy SourceFiles="$(TargetDir)ModFramework.Modules.Lua.dll" DestinationFolder="$(TargetDir)modifications" SkipUnchangedFiles="false" />
+		<MakeDir Directories="$(TargetDir)csharp\" />
+		<RemoveDir Directories="$(TargetDir)csharp\plugins\" />
+		<MakeDir Directories="$(TargetDir)csharp\plugins\" />
+		<Copy SourceFiles="@(Refs)" DestinationFolder="$(TargetDir)csharp/plugins/" />
+		<Copy SourceFiles="@(Patches)" DestinationFolder="$(TargetDir)csharp/plugins/patches/terraria/%(RecursiveDir)" />
+		<Copy SourceFiles="@(TopLevelScripts)" DestinationFolder="$(TargetDir)csharp/plugins/mods/terraria/%(RecursiveDir)" />
+		<Copy SourceFiles="@(Shims)" DestinationFolder="$(TargetDir)csharp/plugins/shims/terraria/%(RecursiveDir)" />
+		<MakeDir Directories="$(TargetDir)clearscript\" />
+		<RemoveDir Directories="$(TargetDir)clearscript\" />
+		<MakeDir Directories="$(TargetDir)clearscript\" />
+		<Copy SourceFiles="@(JavaScript)" DestinationFolder="$(TargetDir)clearscript/%(RecursiveDir)" />
+		<MakeDir Directories="$(TargetDir)lua\" />
+		<RemoveDir Directories="$(TargetDir)lua\" />
+		<MakeDir Directories="$(TargetDir)lua\" />
+		<Copy SourceFiles="@(Lua)" DestinationFolder="$(TargetDir)lua/%(RecursiveDir)" />
+	</Target>
+	<Target Name="CleanAll" AfterTargets="Clean">
+		<RemoveDir Directories="$(OUTDIR)" />
+	</Target>
+</Project>

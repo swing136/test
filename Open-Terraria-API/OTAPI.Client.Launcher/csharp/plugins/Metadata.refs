@@ -1,0 +1,12 @@
+﻿ModFramework.dll
+MonoMod.dll
+MonoMod.RuntimeDetour.dll
+Newtonsoft.Json.dll
+client/OTAPI.exe
+client/OTAPI.Runtime.dll
+ImGui.NET.dll
+FNA.dll
+OTAPI.Client.Launcher.dll
+System.Drawing.Common.dll
+Xilium.CefGlue.dll
+Xilium.CefGlue.Common.dll

@@ -1,0 +1,50 @@
+﻿/*
+Copyright (C) 2020 DeathCradle
+
+This file is part of Open Terraria API v3 (OTAPI)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+using ModFramework;
+using System.Linq;
+
+/// <summary>
+/// @doc Shims and relinks System.Drawing.Graphics
+/// </summary>
+namespace System.Drawing
+{
+    [MonoMod.MonoModIgnore]
+    static partial class Mods
+    {
+        [Modification(ModType.PrePatch, "Relinking System.Drawing.Graphics")]
+        public static void RedirectAssembly(ModFwModder modder)
+        {
+            modder.RelinkAssembly("System.Drawing.Graphics");
+        }
+
+        /// <summary>
+        /// Renames the System.Graphics shim due to conflicts with plugins that use the newer NuGet package.
+        /// </summary>
+        /// <remarks>These shims are not intended for use</remarks>
+        /// <see cref="https://github.com/elevatorguy/map/issues/4"/>
+        /// <param name="modder"></param>
+        [Modification(ModType.PostPatch, "Renaming System.Drawing")]
+        public static void Rename(ModFwModder modder)
+        {
+            var type = modder.Module.Types.Where(x => x.Namespace == "System.Drawing");
+            foreach (var mod in type)
+                mod.Namespace += ".Shims";
+        }
+    }
+}
